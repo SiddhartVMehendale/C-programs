@@ -40,7 +40,7 @@ void pop()
     }
     else
     {
-        printf("\nArray Under flow please push the elements in the stack or press 0 To exit the program\n");
+        printf("\nStack Under flow please push the elements in the stack or press 0 To exit the program\n");
     }
 }
 
