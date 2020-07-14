@@ -8,58 +8,50 @@ struct queue
     struct queue *next;
 };
 
-void delete(struct queue **front, struct queue **rear)
+int delete(struct queue **front)
 {
-    struct queue *temp = *rear;
-    if(*rear == NULL)
+    if(*front==NULL)
     {
-        printf("\n The Queue is empty");
+        return 0;
     }
     else
     {
-        (*rear) = (*rear)->next;
+        struct queue *temp = *front;
+        int data = (*front)->data;
+        *front = (*front)->next;
         free(temp);
-        if(*front == NULL)
-        {
-            *rear = NULL;
-        }
+        return data;
     }
     
 }
 
-void display(struct queue **front,struct queue **rear)
+void display(struct queue **front)
 {
-    struct queue *temp = *rear;
-    if(*rear == NULL)
+    struct queue *temp = *front;
+    while(temp!=NULL)
     {
-        printf("\n The List is empty\n");
-    }
-    else
-    {
-        while(temp!=NULL)
-        {
-            printf("\n%d",temp->data);
-            temp = temp->next;
-        }
+        printf("\n%d",temp->data);
+        temp = temp->next;
     }
 }
 
-void addq(struct queue **front, struct queue **rear, int data)
+void addq(struct queue **front, int data)
 {
-    struct queue *temp;
-    if(*front==NULL || *rear == NULL)
+    struct queue *temp = NEWNODE;
+    temp->data = data;
+    temp->next = NULL;
+    if(*front==NULL)
     {
-        temp = NEWNODE;
-        temp->data = data;
         *front = temp;
-        *rear = temp;
     }
     else
     {
-        temp = NEWNODE;
-        temp->data = data;
-        (*front)->next = temp;
-        (*front) = (*front)->next;
+        struct queue *temp1 = *front;
+        while(temp1->next!=NULL)
+        {
+            temp1 = temp1->next;
+        }
+        temp1->next = temp;
     }
     
 }
@@ -67,8 +59,8 @@ void addq(struct queue **front, struct queue **rear, int data)
 int main()
 {
     int opt, data;
-    struct queue *front, *rear;
-    front = NULL; rear = NULL;
+    struct queue *front;
+    front = NULL;
 
     do
     {
@@ -83,15 +75,20 @@ int main()
             case 1:
                     printf("\nEnter the element you want to add to the queue:");
                     scanf("%d",&data);
-                    addq(&front,&rear,data);
+                    addq(&front,data);
                     break;
 
             case 2:
-                    delete(&front, &rear);
+                    data = delete(&front);
+                    if(data == 0){
+                        printf("\nError\n");
+                    }else{
+                        printf("\n%d",data);
+                    }
                     break;  
 
             case 3:
-                    display(&front,&rear);
+                    display(&front);
                     break;
         }
     }while(opt!=0);
