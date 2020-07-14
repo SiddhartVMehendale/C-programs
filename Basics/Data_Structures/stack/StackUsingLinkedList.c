@@ -7,34 +7,36 @@ struct stack
     int data;
     struct stack *next;
 };
-struct stack *top;
 
 
-void push(int data)
+
+void push(struct stack **top,int data)
 {
+    struct stack *temp;
     if(top == NULL)
     {   
-        top = NEWNODE;
-        top->data=data;
-        top->next=NULL;
+        temp = NEWNODE;
+        temp->data=data;
+        temp->next=NULL;
+        *top = temp;
     }
     else
     {
-        struct stack *temp;
+        
         temp = NEWNODE;
         temp->data = data;
-        temp->next = top;       
-        top=temp;
+        temp->next = *top;       
+        *top=temp;
     }
     
 }
 
-void pop()
+void pop(struct stack **top)
 {
-    if(top!=NULL)
+    if(*top!=NULL)
     {
-        struct stack *temp = top;
-        top = top->next;
+        struct stack *temp = *top;
+        *top = temp->next;
         printf("\nPoped number: %d\n",temp->data);
         free(temp);
     }
@@ -64,12 +66,12 @@ int main()
         case 1:
             printf("\nEnter the number which you want to push in the Stack:");
             scanf("%d",&data);
-            push(data);
+            push(&top,data);
             break;
 
         case 2:
             printf("\nPOP");
-            pop();
+            pop(&top);
             break;
 
         case 0:
