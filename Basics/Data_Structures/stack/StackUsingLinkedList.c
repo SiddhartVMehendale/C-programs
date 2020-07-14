@@ -13,7 +13,7 @@ struct stack
 void push(struct stack **top,int data)
 {
     struct stack *temp;
-    if(top == NULL)
+    if(*top == NULL)
     {   
         temp = NEWNODE;
         temp->data=data;
