@@ -31,18 +31,19 @@ void push(struct stack **top,int data)
     
 }
 
-void pop(struct stack **top)
+int pop(struct stack **top)
 {
     if(*top!=NULL)
     {
         struct stack *temp = *top;
         *top = temp->next;
-        printf("\nPoped number: %d\n",temp->data);
+        int data = temp->data;
         free(temp);
+        return data;
     }
     else
     {
-        printf("\nStack Under flow please push the elements in the stack or press 0 To exit the program\n");
+        return __INT_MAX__;
     }
 }
 
@@ -71,7 +72,13 @@ int main()
 
         case 2:
             printf("\nPOP");
-            pop(&top);
+            data = pop(&top);
+            if(data == __INT_MAX__)
+            {
+                printf("\n Stack Underflow please push the elements in the stack");
+            }else{
+                printf("\n %d",data);
+            }
             break;
 
         case 0:
