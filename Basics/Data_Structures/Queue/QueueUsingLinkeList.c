@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<malloc.h>
+#include<stdlib.h>
 #define NEWNODE (struct queue *)malloc(sizeof(struct queue))
 
 struct queue
@@ -12,7 +13,7 @@ int delete(struct queue **front)
 {
     if(*front==NULL)
     {
-        return 0;
+        return __INT_MAX__;
     }
     else
     {
@@ -80,7 +81,7 @@ int main()
 
             case 2:
                     data = delete(&front);
-                    if(data == 0){
+                    if(data == __INT_MAX__){
                         printf("\nError\n");
                     }else{
                         printf("\n%d",data);
