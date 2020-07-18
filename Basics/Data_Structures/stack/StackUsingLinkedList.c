@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<malloc.h>
+#include<stdbool.h>
 #define NEWNODE (struct stack *)malloc(sizeof(struct stack))
 
 struct stack
@@ -31,19 +32,19 @@ void push(struct stack **top,int data)
     
 }
 
-int pop(struct stack **top)
+bool pop(struct stack **top, int *data)
 {
     if(*top!=NULL)
     {
         struct stack *temp = *top;
         *top = temp->next;
-        int data = temp->data;
+        *data = temp->data;
         free(temp);
-        return data;
+        return true;
     }
     else
     {
-        return __INT_MAX__;
+        return false;
     }
 }
 
@@ -72,8 +73,7 @@ int main()
 
         case 2:
             printf("\nPOP");
-            data = pop(&top);
-            if(data == __INT_MAX__)
+            if((pop(&top,&data))== false)
             {
                 printf("\n Stack Underflow please push the elements in the stack");
             }else{
