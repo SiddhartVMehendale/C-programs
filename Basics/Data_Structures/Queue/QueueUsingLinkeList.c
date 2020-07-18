@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<malloc.h>
 #include<stdlib.h>
+#include<stdbool.h>
 #define NEWNODE (struct queue *)malloc(sizeof(struct queue))
 
 struct queue
@@ -9,30 +10,35 @@ struct queue
     struct queue *next;
 };
 
-int delete(struct queue **front)
+bool deleteq(struct queue **front, int *data)
 {
     if(*front==NULL)
     {
-        return __INT_MAX__;
+        return false;
     }
     else
     {
         struct queue *temp = *front;
-        int data = (*front)->data;
+        *data = (*front)->data;
         *front = (*front)->next;
         free(temp);
-        return data;
+        return true;
     }
     
 }
 
-void display(struct queue **front)
+bool display(struct queue **front)
 {
     struct queue *temp = *front;
-    while(temp!=NULL)
+    if(*front==NULL)
     {
-        printf("\n%d",temp->data);
-        temp = temp->next;
+        return false;
+    }else{
+        while(temp!=NULL)
+        {
+            printf("\n%d",temp->data);
+            temp = temp->next;
+        }
     }
 }
 
@@ -80,8 +86,8 @@ int main()
                     break;
 
             case 2:
-                    data = delete(&front);
-                    if(data == __INT_MAX__){
+                    
+                    if(deleteq(&front, &data) == false){
                         printf("\nError\n");
                     }else{
                         printf("\n%d",data);
