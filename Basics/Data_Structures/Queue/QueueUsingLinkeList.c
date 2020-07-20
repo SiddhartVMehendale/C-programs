@@ -27,18 +27,13 @@ bool deleteq(struct queue **front, int *data)
     
 }
 
-bool display(struct queue **front)
+void display(struct queue **front)
 {
     struct queue *temp = *front;
-    if(*front==NULL)
+    while(temp!=NULL)
     {
-        return false;
-    }else{
-        while(temp!=NULL)
-        {
-            printf("\n%d",temp->data);
-            temp = temp->next;
-        }
+        printf("\n%d",temp->data);
+        temp = temp->next;
     }
 }
 
@@ -72,7 +67,7 @@ int main()
     do
     {
         printf("\n1] Add to the Queue");
-        printf("\n2] Delete forom Queue");
+        printf("\n2] Delete form Queue");
         printf("\n3] Display the Queue");
         printf("\n0] Exit the program");
         printf("\nEnter your options:");
@@ -95,7 +90,15 @@ int main()
                     break;  
 
             case 3:
-                    display(&front);
+                    if(front == NULL)
+                    {
+                        printf("\nError\n");
+                    }
+                    else
+                    {
+                        display(&front);
+                    }
+                    
                     break;
         }
     }while(opt!=0);
