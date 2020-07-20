@@ -14,18 +14,15 @@ struct stack
 void push(struct stack **top,int data)
 {
     struct stack *temp;
+    temp = NEWNODE;
+    temp->data = data;
     if(*top == NULL)
     {   
-        temp = NEWNODE;
-        temp->data=data;
         temp->next=NULL;
         *top = temp;
     }
     else
     {
-        
-        temp = NEWNODE;
-        temp->data = data;
         temp->next = *top;       
         *top=temp;
     }
