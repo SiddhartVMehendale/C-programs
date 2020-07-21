@@ -82,23 +82,18 @@ int main()
 
             case 2:
                     
-                    if(deleteq(&front, &data) == false){
-                        printf("\nError\n");
-                    }else{
-                        printf("\n%d",data);
-                    }
-                    break;  
-
-            case 3:
-                    if(front == NULL)
+                    if(deleteq(&front, &data) == false)
                     {
                         printf("\nError\n");
                     }
                     else
                     {
-                        display(&front);
+                        printf("\n%d",data);
                     }
-                    
+                    break;  
+
+            case 3:
+                    display(&front);
                     break;
         }
     }while(opt!=0);
