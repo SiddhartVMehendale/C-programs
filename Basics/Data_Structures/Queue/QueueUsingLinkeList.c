@@ -27,9 +27,9 @@ bool deleteq(struct queue **front, int *data)
     
 }
 
-void display(struct queue **front)
+void display(struct queue *front)
 {
-    struct queue *temp = *front;
+    struct queue *temp = front;
     while(temp!=NULL)
     {
         printf("\n%d",temp->data);
@@ -105,7 +105,7 @@ int main()
                     break;  
 
             case 3:
-                    display(&front);
+                    display(front);
                     break;
         }
     }while(opt!=0);
