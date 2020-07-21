@@ -11,10 +11,14 @@ struct stack
 
 
 
-void push(struct stack **top,int data)
+bool push(struct stack **top,int data)
 {
     struct stack *temp;
     temp = NEWNODE;
+    if(temp == NULL)
+    {
+        return false;
+    }
     temp->data = data;
     if(*top == NULL)
     {   
@@ -65,7 +69,15 @@ int main()
         case 1:
             printf("\nEnter the number which you want to push in the Stack:");
             scanf("%d",&data);
-            push(&top,data);
+            if(!push(&top,data))
+            {
+                printf("\nError");
+            }
+            else
+            {
+                printf("\nPush succesful");
+            }
+            
             break;
 
         case 2:
