@@ -37,9 +37,13 @@ void display(struct queue **front)
     }
 }
 
-void addq(struct queue **front, int data)
+bool addq(struct queue **front, int data)
 {
     struct queue *temp = NEWNODE;
+    if(temp == NULL)
+    {
+        return false;
+    }
     temp->data = data;
     temp->next = NULL;
     if(*front==NULL)
@@ -55,7 +59,7 @@ void addq(struct queue **front, int data)
         }
         temp1->next = temp;
     }
-    
+    return true;
 }
 
 int main()
@@ -77,7 +81,15 @@ int main()
             case 1:
                     printf("\nEnter the element you want to add to the queue:");
                     scanf("%d",&data);
-                    addq(&front,data);
+                    if(!addq(&front,data))
+                    {
+                        printf("\nFailed");
+                    }
+                    else
+                    {
+                        printf("\nAdded succesfully");
+                    }
+                    
                     break;
 
             case 2:
