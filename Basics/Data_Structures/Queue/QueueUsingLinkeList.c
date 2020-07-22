@@ -1,18 +1,9 @@
 #include<stdio.h>
-#include<malloc.h>
-#include<stdlib.h>
-#include<stdbool.h>
-#define NEWNODE (struct queue *)malloc(sizeof(struct queue))
-
-struct queue
-{
-    int data;
-    struct queue *next;
-};
+#include "QueueUsingLinkeList.h"
 
 bool deleteq(struct queue **front, int *data)
 {
-    if(*front==NULL)
+    if(isNull(*front))  
     {
         return false;
     }
@@ -30,7 +21,7 @@ bool deleteq(struct queue **front, int *data)
 void display(struct queue *front)
 {
     struct queue *temp = front;
-    while(temp!=NULL)
+    while(!isNull(temp))
     {
         printf("\n%d",temp->data);
         temp = temp->next;
@@ -40,20 +31,20 @@ void display(struct queue *front)
 bool addq(struct queue **front, int data)
 {
     struct queue *temp = NEWNODE;
-    if(temp == NULL)
+    if(isNull(temp))
     {
         return false;
     }
     temp->data = data;
     temp->next = NULL;
-    if(*front==NULL)
+    if(isNull(*front))
     {
         *front = temp;
     }
     else
     {
         struct queue *temp1 = *front;
-        while(temp1->next!=NULL)
+        while(!isNull(temp1->next)) 
         {
             temp1 = temp1->next;
         }
@@ -107,6 +98,25 @@ int main()
             case 3:
                     display(front);
                     break;
+
+            case 0:
+                    if(!isNull(front))
+                    {
+                        struct queue *temp = front;
+                        while(!isNull(front))
+                        {
+                            front = front->next;
+                            free(temp);
+                            temp = front;
+                        }
+                    }
+                    printf("\nExit");
+                    break;
+
+
+            default:
+                printf("\nInvalid operation");
+                break;
         }
     }while(opt!=0);
 }
