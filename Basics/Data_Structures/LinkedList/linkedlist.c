@@ -1,55 +1,44 @@
-/* Insert, delete, append, prepend, count, print */
 #include<stdio.h>
-#include<malloc.h>
-#include<stdbool.h>
-#define NEWNODE (struct node *)malloc(sizeof(struct node))
+#include "linkedlist.h"
 
-
-struct node
-{
-    int data;
-    struct node *next;
-};
-
-void insert(struct node **, int);
-void display(struct node **);
-void append(struct node **, int);
-void prepend(struct node **, int);
-int count(struct node **);
-bool search(struct node **, int);
-void sort(struct node **);
-void delete(struct node **, int);
-
-void delete(struct node **head, int data)
+bool delete(struct node **head, int data)
 {
     struct node *temp = *head;
-    if(data == 1)
+
+    if(*head == NULL)
     {
-        *head = (*head)->next;
-        free(temp);
+        return false;
     }
     else
     {
-        int count = 1;
-        while(count!=data-1)
+        if(data == 1)
         {
-            temp= temp->next;
-            count++;
-        }
-        struct node *temp1 = temp->next;
-        if(temp1->next==NULL)
-        {
-            temp->next = NULL;
-            free(temp1);
+            *head = (*head)->next;
+            free(temp);
         }
         else
         {
-            temp->next = temp1->next;
-            free(temp1);
+            int count = 1;
+            while(count!=data-1)
+            {
+                temp= temp->next;
+                count++;
+            }
+            struct node *temp1 = temp->next;
+            if(isNull(temp1->next))            
+            {
+                temp->next = NULL;
+                free(temp1);
+            }
+            else
+            {
+                temp->next = temp1->next;
+                free(temp1);
+            }
+            
         }
-        
+        return true;
     }
-       
 }
 
 void sort(struct node **head)
@@ -61,7 +50,7 @@ void sort(struct node **head)
     while(i!=cnt)
     {
         temp = *head;
-        while(temp->next!=NULL)
+        while(!isNull(temp->next))                     
         {
             if(temp->data > temp->next->data)
             {
@@ -75,33 +64,29 @@ void sort(struct node **head)
     }
 }
 
-bool search(struct node **head, int data)
+bool search(struct node *head, int data)
 {
-    if(*head == NULL)
+    if(isNull(head))                                                
     {
         return false;
     }
-    else
+    struct node *temp = head;
+    while(!isNull(temp))                                                      
     {
-        struct node *temp = *head;
-        while(temp!=NULL)
+        if(temp->data == data)
         {
-            if(temp->data == data)
-            {
-                return true;
-            }
-            temp = temp->next;
+            return true;
         }
-        return false;
+        temp = temp->next;
     }
-    
+    return false;
 }
 
 int count(struct node **head)
 {
     struct node *temp = *head;  
     int count = 0;
-    while(temp!=NULL)
+    while(!isNull(temp))                                                                     
     {
         count++;
         temp = temp->next;
@@ -111,13 +96,13 @@ int count(struct node **head)
 
 void prepend(struct node **head, int data)
 {
-    if(*head==NULL)
+    if(isNull(*head))                                                                              
     {
         insert(&*head, data);
     }
     else
     {    
-        struct node *temp = NEWNODE;
+        struct node *temp = CREATENODE;
         temp->data = data;
         temp->next = *head;
         *head = temp;      
@@ -126,31 +111,23 @@ void prepend(struct node **head, int data)
 
 void append(struct node **head, int data)
 {
-    if(*head == NULL)
+    if(isNull(*head))                                                                                    
     {
         insert(&*head, data);
     }
     else
     {
-        struct node *temp = *head;
-        while(temp->next != NULL)
-        {
-            temp = temp->next;
-        }
-        temp->next = NEWNODE;
-        temp = temp->next;
-        temp->next = NULL;
-        temp->data= data;
+        insertPos(&*head, data, count(&*head));
     }
     
 }
 
 
-void display(struct node **head)
+void display(struct node *head)
 {
-    struct node *temp = *head;
+    struct node *temp = head;
     printf("\n");
-    while(temp!= NULL)
+    while(!isNull(temp))                                                                                             
     {
         printf("\t%d",temp->data);
         temp = temp->next;
@@ -158,23 +135,99 @@ void display(struct node **head)
     printf("\n");
 }
 
-void insert(struct node **head, int data)
+bool insert(struct node **head, int data)
 {
-    struct node *temp = NEWNODE;
+    struct node *temp = CREATENODE;
+    if(isNull(temp))                                                                                                            
+    {
+        return false;
+    }
     temp->next = NULL;
     temp->data = data;
-    if(*head == NULL)
+    if(isNull(*head))                                                                                                   
     {
         *head = temp;
     }
     else
     {
         struct node *temp1 = *head;
-        while(temp1->next != NULL)
+        while(!isNull(temp1->next))                                                                                                              
         {
             temp1 = temp1->next;
         }
         temp1->next = temp;
+    }
+    return true;
+}
+
+bool deleteLast(struct node **head)
+{
+    if(!isNull(*head))
+    {
+        delete(&*head,count(&*head));
+        return true;
+    }
+    else
+    {
+        return false; 
+    }    
+}
+
+bool deleteFirst(struct node **head)
+{
+    if(!isNull(*head))
+    {
+        delete(&*head,1);
+        return true;
+    }
+    else
+    {
+        return false; 
+    }
+    
+}
+
+bool insertPos(struct node **head, int data, int pos)
+{
+    if(isNull(*head))
+    {
+        if(!insert(&*head, data))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+        
+    }
+    else if(pos == 1)
+    {
+        prepend(&*head, data);
+        return true;
+    }
+    else
+    {
+        if(pos >= count(&*head))
+        {
+            append(&*head, data);
+            return true;
+        }
+        else
+        {
+            struct node *temp = *head, *temp1 = CREATENODE;
+            int i = 0;
+            while(i!=pos-1)
+            {
+                temp = temp->next;
+                i++;
+            }
+            temp1->next = temp->next;
+            temp->next = temp1;
+            temp1->data = data;
+            return true;
+        }
+        
     }
     
 }
@@ -182,7 +235,7 @@ void insert(struct node **head, int data)
 int main()
 {
     struct node *head = NULL;
-    int opt,data;
+    int opt,data,pos;
 
     do
     {
@@ -194,6 +247,9 @@ int main()
         printf("\n6] Search:");
         printf("\n7] Sort");
         printf("\n8] Delete");
+        printf("\n9] Delete Last");
+        printf("\n10] Delete First");
+        printf("\n11] Insert position:");
         printf("\n0] Exit:");
 
         printf("\nEnter the option:");
@@ -203,11 +259,19 @@ int main()
         case 1:
                 printf("\nEnter the data you want to insert into the linked list: ");
                 scanf("%d",&data);
-                insert(&head,data);
+                if(!insert(&head,data))
+                {
+                    printf("\nFailed");
+                }
+                else
+                {
+                    printf("\nNode created");
+                }
+                
                 break;
         
         case 2:
-                display(&head);
+                display(head);
                 break;
 
         case 3:
@@ -229,7 +293,7 @@ int main()
         case 6:
                 printf("\n Enter the data which you want to search: ");
                 scanf("%d",&data);
-                if(!search(&head,data))
+                if(!search(head,data))
                 {
                     printf("\n Not found");
                 }
@@ -246,21 +310,74 @@ int main()
         case 8:
                 printf("\nEnter the number of the node you want to delete: ");
                 scanf("%d",&data);
-                if(data>count(&head))
+                if(!delete(&head,data))
                 {
                     printf("\nEntered  node excedes the present number of nodes. The count of nodes is %d",count(&head));
                 }
                 else
                 {
-                    delete(&head,data);
+                    
                     printf("\nNode deleted");
                 }
                 
                 break;
 
+        case 9:
+               if(!deleteLast(&head))
+                {
+                    printf("\nFailed");
+                }
+                else
+                {
+                    
+                    printf("\nNode deleted");
+                }
+                break;
+
+        case 10:
+                if(!deleteFirst(&head))
+                {
+                    printf("\nFailed");
+                }
+                else
+                {
+                    
+                    printf("\nNode deleted");
+                }
+                break;
+
+        case 11:
+                printf("\nEnter the postion in which you want to insert the node: ");
+                scanf("%d",&pos);
+                printf("\nEnter the data you want to insert into the linked list: ");
+                scanf("%d",&data);
+                if(!insertPos(&head,data,pos))
+                {
+                    printf("\nFailed");
+                }
+                else
+                {
+                    printf("\nNode created");
+                }
+                break;
+
         case 0:
-            printf("\nExit");
+            if(!isNull(head))
+            {
+                struct node *temp = head;
+                while(!isNull(head))                                                                     
+                {
+                    head = head->next;
+                    free(temp);
+                    temp = head;
+                }
+            }
+            printf("\nExit\n");
             break;
+
+        default:
+                printf("\nInvalid option");
+                break;
         }
     }while(opt!=0);
 
