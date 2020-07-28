@@ -7,7 +7,7 @@ bool push(struct stack **top,int data)
 {
     struct stack *temp;
     temp = NEWNODE;
-    if(isNull(temp))
+    if(isNull(temp) || data == NULL)
     {
         return false;
     }
